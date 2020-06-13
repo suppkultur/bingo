@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <title>SuppKultur Bingo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      font-family: NonBreakingSpaceOverride, "Hoefler Text", Garamond, "Times New Roman", serif;
+      font-size: 20px;
+    }
+
+    h1 {
+      text-transform: uppercase;
+      color: crimson;
+      font-size: 3em;
+      letter-spacing: 8px;
+    }
+
+    p {
+      margin: 20px 0 24px;
+    }
+
+    main {
+      max-width: 640px;
+      padding: 0 20px;
+      height: 90%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .logo {
+      max-width: 360px;
+    }
+
+    .download-button {
+      display: inline-block;
+      text-decoration: none;
+      background: #b95c27;
+      color: #fff;
+      border: 0;
+      padding: 12px 12px 10px;
+      border-radius: 4px;
+      font: inherit;
+      transition: background 0.1s ease-in;
+    }
+
+    .download-button:hover {
+      background: #994c1f;
+      text-decoration: none;
+    }
+
+    footer {
+      height: 10%;
+      text-align: center;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+    }
+
+    a {
+      color: #b95c27;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div>
+      <img class="logo" src="/assets/logo.png" alt="SuppKultur Logo">
+      <p>
+        Lade hier deinen Bingo-Zettel herunter und druck ihn dir aus.
+      </p>
+      <a class="download-button" href="/download">Bingo-Zettel herunterladen</a>
+    </div>
+  </main>
+  <footer>
+    <a href="https://suppkultur.org">suppkultur.org</a>
+  </footer>
+</body>
+
+</html>
