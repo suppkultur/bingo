@@ -15,9 +15,8 @@ function randomNumber(min, max) {
 function drawCard(doc, x, y, width, height, margin) {
     let dashLength = mmToPdfPoints(3);
     let dashSpace = mmToPdfPoints(4)
-    let headingSize = mmToPdfPoints(16);
     let numberSize = mmToPdfPoints(8);
-    let innerY = margin * 3 + headingSize;
+    let innerY = margin * 3 + mmToPdfPoints(22);
     let maxInnerHeight = height - innerY;
     let maxInnerWidth = width - margin - margin;
     var innerHeight, innerWidth;
@@ -39,14 +38,10 @@ function drawCard(doc, x, y, width, height, margin) {
         .dash(dashLength, { space: dashSpace })
         .stroke();
 
-    // Draw headline.
-    doc.fontSize(headingSize)
-    doc
-        .font('Helvetica-Bold')
-        .text("BINGO", x, y + margin * 2, {
-            width: width,
-            align: 'center',
-        })
+    // Draw SuppKultur logo.
+    doc.image('assets/logo.png', x + margin, y + margin, {
+        width: innerWidth
+    })
 
     // Draw inner box.
     doc.moveTo(x + margin, y + innerY)
@@ -92,12 +87,31 @@ function drawCard(doc, x, y, width, height, margin) {
 
             // Now let's figure out where to put this.
             doc.font('Helvetica-Bold')
+                .fillColor('black')
                 .text(`${num}`, x + margin + i * boxSize, y + innerY + j * boxSize + (boxSize - numberSize) / 2 + mmToPdfPoints(1), {
                     width: boxSize,
                     align: 'center',
                 })
         }
     }
+
+    // Draw footer.
+    let footerSize = mmToPdfPoints(5);
+    doc.fontSize(footerSize);
+    let linkText = "suppkultur.org";
+    let linkX = x + margin;
+    let linkY = (y + height) - margin - footerSize;
+    doc.font('Helvetica')
+        .fillColor('#b95c27')
+        .text(linkText, linkX, linkY, {
+            width: innerWidth,
+            align: 'right',
+        });
+
+    // Add link
+    let linkWidth = doc.widthOfString(linkText);
+    let linkHeight = doc.currentLineHeight();
+    doc.link(linkX + innerWidth - linkWidth, linkY, linkWidth, linkHeight, 'https://suppkultur.org/');
 }
 
 // generatePDF generates the PDF and returns its buffer.
