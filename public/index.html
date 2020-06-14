@@ -41,6 +41,21 @@
       text-align: center;
     }
 
+    @media screen and (max-height: 500px) {
+      main {
+        height: auto;
+      }
+
+      footer {
+        height: auto;
+        padding-bottom: 40px;
+      }
+    }
+
+    .centered {
+      padding: 40px 0;
+    }
+
     .logo {
       max-width: 100%;
     }
@@ -125,7 +140,7 @@
 
 <body>
   <main>
-    <div>
+    <div class="centered">
       <img class="logo" src="/assets/logo.png" alt="SuppKultur Logo">
       <p>
         Lade hier deinen Bingo-Zettel herunter und druck ihn dir aus.
