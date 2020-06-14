@@ -1,5 +1,5 @@
-const path = require('path');
 const PDFDocument = require('pdfkit');
+const sizeOf = require('image-size');
 
 // pdfPointsToCm returns the centimeter value 
 function mmToPdfPoints(mm) {
@@ -13,13 +13,18 @@ function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min) + min)
 }
 
-function drawCard(doc, x, y, width, height, margin) {
+function drawCard(doc, x, y, width, height, horizontalMargin) {
     let dashLength = mmToPdfPoints(3);
     let dashSpace = mmToPdfPoints(4)
     let numberSize = mmToPdfPoints(8);
-    let innerY = margin * 3 + mmToPdfPoints(22);
+    let footerSize = mmToPdfPoints(5);
+    let imagePath = require.resolve("./logo.png");
+    let imageSize = sizeOf(imagePath);
+    let maxInnerWidth = width - horizontalMargin * 2;
+    let imageHeight = (imageSize.height / imageSize.width) * maxInnerWidth;
+    let verticalMargin = (height - imageHeight - footerSize - maxInnerWidth) / 4;
+    let innerY = imageHeight + verticalMargin * 2;
     let maxInnerHeight = height - innerY;
-    let maxInnerWidth = width - margin - margin;
     var innerHeight, innerWidth;
     if (maxInnerHeight > maxInnerWidth) {
         innerHeight = maxInnerWidth
@@ -40,27 +45,27 @@ function drawCard(doc, x, y, width, height, margin) {
         .stroke();
 
     // Draw SuppKultur logo.
-    doc.image(require.resolve("./logo.png"), x + margin, y + margin, {
+    doc.image(imagePath, x + horizontalMargin, y + verticalMargin, {
         width: innerWidth
     });
 
     // Draw inner box.
-    doc.moveTo(x + margin, y + innerY)
-        .lineTo(x + margin + innerWidth, y + innerY)
-        .lineTo(x + margin + innerWidth, y + innerY + innerHeight)
-        .lineTo(x + margin, y + innerY + innerHeight)
-        .lineTo(x + margin, y + innerY)
+    doc.moveTo(x + horizontalMargin, y + innerY)
+        .lineTo(x + horizontalMargin + innerWidth, y + innerY)
+        .lineTo(x + horizontalMargin + innerWidth, y + innerY + innerHeight)
+        .lineTo(x + horizontalMargin, y + innerY + innerHeight)
+        .lineTo(x + horizontalMargin, y + innerY)
         .undash()
         .stroke();
 
     // Draw grid.
     for (var i = 0; i < 4; i++) {
-        doc.moveTo(x + margin + boxSize * (i + 1), y + innerY)
-            .lineTo(x + margin + boxSize * (i + 1), y + innerY + innerHeight)
+        doc.moveTo(x + horizontalMargin + boxSize * (i + 1), y + innerY)
+            .lineTo(x + horizontalMargin + boxSize * (i + 1), y + innerY + innerHeight)
             .stroke();
 
-        doc.moveTo(x + margin, y + innerY + boxSize * (i + 1))
-            .lineTo(x + margin + innerWidth, y + innerY + boxSize * (i + 1))
+        doc.moveTo(x + horizontalMargin, y + innerY + boxSize * (i + 1))
+            .lineTo(x + horizontalMargin + innerWidth, y + innerY + boxSize * (i + 1))
             .stroke();
     }
 
@@ -89,7 +94,7 @@ function drawCard(doc, x, y, width, height, margin) {
             // Now let's figure out where to put this.
             doc.font('Helvetica-Bold')
                 .fillColor('black')
-                .text(`${num}`, x + margin + i * boxSize, y + innerY + j * boxSize + (boxSize - numberSize) / 2 + mmToPdfPoints(1), {
+                .text(`${num}`, x + horizontalMargin + i * boxSize, y + innerY + j * boxSize + (boxSize - numberSize) / 2 + mmToPdfPoints(1), {
                     width: boxSize,
                     align: 'center',
                 })
@@ -97,11 +102,10 @@ function drawCard(doc, x, y, width, height, margin) {
     }
 
     // Draw footer.
-    let footerSize = mmToPdfPoints(5);
     doc.fontSize(footerSize);
     let linkText = "suppkultur.org";
-    let linkX = x + margin;
-    let linkY = (y + height) - margin - footerSize;
+    let linkX = x + horizontalMargin;
+    let linkY = y + innerY + innerHeight + verticalMargin;
     doc.font('Helvetica')
         .fillColor('#b95c27')
         .text(linkText, linkX, linkY, {
