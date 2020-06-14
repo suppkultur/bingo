@@ -1,3 +1,4 @@
+const path = require('path');
 const PDFDocument = require('pdfkit');
 
 // pdfPointsToCm returns the centimeter value 
@@ -39,9 +40,9 @@ function drawCard(doc, x, y, width, height, margin) {
         .stroke();
 
     // Draw SuppKultur logo.
-    doc.image('assets/logo.png', x + margin, y + margin, {
+    doc.image(require.resolve("./logo.png"), x + margin, y + margin, {
         width: innerWidth
-    })
+    });
 
     // Draw inner box.
     doc.moveTo(x + margin, y + innerY)
