@@ -1,6 +1,6 @@
 {
   "name": "bingo",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Generate bingo sheets for SuppKultur",
   "repository": {
     "type": "git",
