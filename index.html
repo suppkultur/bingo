@@ -51,11 +51,11 @@
       border-radius: 4px;
       font: inherit;
       transition: background 0.1s ease-in;
+      cursor: pointer;
     }
 
     .download-button:hover {
       background: #994c1f;
-      text-decoration: none;
     }
 
     footer {
@@ -74,6 +74,12 @@
     a:hover {
       text-decoration: underline;
     }
+
+    input[type="number"] {
+      line-height: inherit;
+      border: none;
+      font-size: inherit;
+    }
   </style>
 </head>
 
@@ -84,7 +90,13 @@
       <p>
         Lade hier deinen Bingo-Zettel herunter und druck ihn dir aus.
       </p>
-      <a class="download-button" href="/.netlify/functions/generate-bingo-sheet">Bingo-Zettel herunterladen</a>
+      <form method="GET" action="/.netlify/functions/generate-bingo-sheet">
+        <p>
+          Wieviele Menschen in deinem Haushalt mitspielen (nicht schummeln):
+          <input name="count" type="number" min="1" max="4" value="1" />
+        </p>
+        <input type="submit" class="download-button" value="Bingo-Zettel herunterladen" />
+      </form>
     </div>
   </main>
   <footer>

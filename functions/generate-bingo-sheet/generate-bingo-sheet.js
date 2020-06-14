@@ -116,7 +116,7 @@ function drawCard(doc, x, y, width, height, margin) {
 }
 
 // generatePDF generates the PDF and returns its buffer.
-async function generatePDF() {
+async function generatePDF(count) {
     // All units in mm.
     let width = mmToPdfPoints(210);
     let height = mmToPdfPoints(297);
@@ -159,16 +159,24 @@ async function generatePDF() {
         })
 
         drawCard(doc, leftMargin, topMargin, sheetWidth, sheetHeight, margin)
-        // drawCard(doc, leftMargin + sheetWidth + sheetMargin, topMargin, sheetWidth, sheetHeight, margin)
-        // drawCard(doc, leftMargin, topMargin + sheetHeight + sheetMargin, sheetWidth, sheetHeight, margin)
-        // drawCard(doc, leftMargin + sheetWidth + sheetMargin, topMargin + sheetHeight + sheetMargin, sheetWidth, sheetHeight, margin)
+        if (count > 1) {
+            drawCard(doc, leftMargin + sheetWidth + sheetMargin, topMargin, sheetWidth, sheetHeight, margin)
+        }
+        if (count > 2) {
+            drawCard(doc, leftMargin, topMargin + sheetHeight + sheetMargin, sheetWidth, sheetHeight, margin)
+        }
+        if (count > 3) {
+            drawCard(doc, leftMargin + sheetWidth + sheetMargin, topMargin + sheetHeight + sheetMargin, sheetWidth, sheetHeight, margin)
+        }
 
         doc.end();
     })
 }
 
 exports.handler = async (event, context) => {
-    let buffer = await generatePDF()
+    let count = event.queryStringParameters.count || 1;
+
+    let buffer = await generatePDF(count)
     return {
         isBase64Encoded: true,
         statusCode: 200,
