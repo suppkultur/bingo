@@ -2,15 +2,11 @@
   "name": "bingo",
   "version": "0.3.0",
   "description": "Generate bingo sheets for SuppKultur",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/suppkultur/bingo.git"
   },
   "author": "Arne Bahlo <hallo@arne.me>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/suppkultur/bingo/issues"
   },

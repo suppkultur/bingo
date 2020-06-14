@@ -53,7 +53,7 @@ function drawCard(doc, x, y, width, height, margin) {
         .undash()
         .stroke();
 
-    // Draw grid and numbers.
+    // Draw grid.
     for (var i = 0; i < 4; i++) {
         doc.moveTo(x + margin + boxSize * (i + 1), y + innerY)
             .lineTo(x + margin + boxSize * (i + 1), y + innerY + innerHeight)
