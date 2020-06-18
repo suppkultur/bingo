@@ -187,16 +187,17 @@ exports.handler = async (event, context) => {
         // These parameters are specifically for goatcounter.com.
         url.searchParams.append('p', `/.netlify/functions/suppkultur-bingo?count=${count}`)
         url.searchParams.append('t', 'suppkultur-bingo.pdf');
-        // No need to `await`, can be async.
-        fetch(url.toString(), {
+        // We need to await bc Netlify may kill our function before we can
+        // send the request.
+        await fetch(url.toString(), {
             method: method,
             headers: {
                 'User-Agent': 'NetlifyFunctions/1.0 suppkultur-bingo.js',
             },
-        }).catch(console.error);
+        })
     }
 
-    let buffer = await generatePDF(count)
+    const buffer = await generatePDF(count)
     return {
         isBase64Encoded: true,
         statusCode: 200,
