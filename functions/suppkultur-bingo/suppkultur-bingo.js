@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const PDFDocument = require('pdfkit');
 const sizeOf = require('image-size');
 
@@ -178,7 +179,22 @@ async function generatePDF(count) {
 }
 
 exports.handler = async (event, context) => {
-    let count = event.queryStringParameters.count || 1;
+    const count = event.queryStringParameters.count || 1;
+
+    if (process.env.ANALYTICS_URL) {
+        const method = process.env.ANALYTICS_METHOD || 'POST';
+        const url = new URL(process.env.ANALYTICS_URL);
+        // These parameters are specifically for goatcounter.com.
+        url.searchParams.append('p', `/.netlify/functions/suppkultur-bingo?count=${count}`)
+        url.searchParams.append('t', 'suppkultur-bingo.pdf');
+        // No need to `await`, can be async.
+        fetch(url.toString(), {
+            method: method,
+            headers: {
+                'User-Agent': 'NetlifyFunctions/1.0 suppkultur-bingo.js',
+            },
+        }).catch(console.error);
+    }
 
     let buffer = await generatePDF(count)
     return {
