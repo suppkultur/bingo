@@ -4,8 +4,8 @@ const sizeOf = require('image-size');
 
 // pdfPointsToCm returns the centimeter value 
 function mmToPdfPoints(mm) {
-    let inch = mm / 25.4;
-    let points = inch * 72;
+    const inch = mm / 25.4;
+    const points = inch * 72;
     return points
 }
 
@@ -15,17 +15,17 @@ function randomNumber(min, max) {
 }
 
 function drawCard(doc, x, y, width, height, horizontalMargin) {
-    let dashLength = mmToPdfPoints(3);
-    let dashSpace = mmToPdfPoints(4)
-    let numberSize = mmToPdfPoints(8);
-    let footerSize = mmToPdfPoints(5);
-    let imagePath = require.resolve("./logo.png");
-    let imageSize = sizeOf(imagePath);
-    let maxInnerWidth = width - horizontalMargin * 2;
-    let imageHeight = (imageSize.height / imageSize.width) * maxInnerWidth;
-    let verticalMargin = (height - imageHeight - footerSize - maxInnerWidth) / 4;
-    let innerY = imageHeight + verticalMargin * 2;
-    let maxInnerHeight = height - innerY;
+    const dashLength = mmToPdfPoints(3);
+    const dashSpace = mmToPdfPoints(4)
+    const numberSize = mmToPdfPoints(8);
+    const footerSize = mmToPdfPoints(5);
+    const imagePath = require.resolve("./logo.png");
+    const imageSize = sizeOf(imagePath);
+    const maxInnerWidth = width - horizontalMargin * 2;
+    const imageHeight = (imageSize.height / imageSize.width) * maxInnerWidth;
+    const verticalMargin = (height - imageHeight - footerSize - maxInnerWidth) / 4;
+    const innerY = imageHeight + verticalMargin * 2;
+    const maxInnerHeight = height - innerY;
     var innerHeight, innerWidth;
     if (maxInnerHeight > maxInnerWidth) {
         innerHeight = maxInnerWidth
@@ -34,7 +34,7 @@ function drawCard(doc, x, y, width, height, horizontalMargin) {
         innerHeight = maxInnerHeight
         innerWidth = maxInnerHeight
     }
-    let boxSize = innerHeight / 5;
+    const boxSize = innerHeight / 5;
 
     // Draw outer, dashed box.
     doc.moveTo(x, y)
@@ -71,10 +71,10 @@ function drawCard(doc, x, y, width, height, horizontalMargin) {
     }
 
     // Calculate numbers.
-    let numbers = [[], [], [], [], []];
-    for (var i = 0; i < 5; i++) {
-        for (var j = 0; j < 5; j++) {
-            var num
+    const numbers = [[], [], [], [], []];
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            let num
             while (true) {
                 num = randomNumber(i * 15 + 1, i * 15 + 15)
                 if (!numbers[i].includes(num)) {
@@ -87,10 +87,10 @@ function drawCard(doc, x, y, width, height, horizontalMargin) {
 
     // Draw numbers.
     doc.fontSize(numberSize)
-    for (var i = 0; i < 5; i++) {
-        for (var j = 0; j < 5; j++) {
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
             // We have to access the array per column, that's why we do [j][i].
-            let num = numbers[i][j]
+            const num = numbers[i][j]
 
             // Now let's figure out where to put this.
             doc.font('Helvetica-Bold')
@@ -104,9 +104,9 @@ function drawCard(doc, x, y, width, height, horizontalMargin) {
 
     // Draw footer.
     doc.fontSize(footerSize);
-    let linkText = "suppkultur.org";
-    let linkX = x + horizontalMargin;
-    let linkY = y + innerY + innerHeight + verticalMargin;
+    const linkText = "suppkultur.org";
+    const linkX = x + horizontalMargin;
+    const linkY = y + innerY + innerHeight + verticalMargin;
     doc.font('Helvetica')
         .fillColor('#b95c27')
         .text(linkText, linkX, linkY, {
@@ -115,31 +115,31 @@ function drawCard(doc, x, y, width, height, horizontalMargin) {
         });
 
     // Add link
-    let linkWidth = doc.widthOfString(linkText);
-    let linkHeight = doc.currentLineHeight();
+    const linkWidth = doc.widthOfString(linkText);
+    const linkHeight = doc.currentLineHeight();
     doc.link(linkX + innerWidth - linkWidth, linkY, linkWidth, linkHeight, 'https://suppkultur.org/');
 }
 
 // generatePDF generates the PDF and returns its buffer.
 async function generatePDF(count) {
     // All units in mm.
-    let width = mmToPdfPoints(210);
-    let height = mmToPdfPoints(297);
-    let topMargin = mmToPdfPoints(16.9);
-    let bottomMargin = mmToPdfPoints(16.9);
-    let leftMargin = mmToPdfPoints(24.1);
-    let rightMargin = mmToPdfPoints(8.1);
-    let sheetMargin = mmToPdfPoints(10);
-    let margin = mmToPdfPoints(5);
+    const width = mmToPdfPoints(210);
+    const height = mmToPdfPoints(297);
+    const topMargin = mmToPdfPoints(16.9);
+    const bottomMargin = mmToPdfPoints(16.9);
+    const leftMargin = mmToPdfPoints(24.1);
+    const rightMargin = mmToPdfPoints(8.1);
+    const sheetMargin = mmToPdfPoints(10);
+    const margin = mmToPdfPoints(5);
 
     // Computed units.
-    let contentWidth = width - leftMargin - rightMargin;
-    let contentHeight = height - topMargin - bottomMargin;
-    let sheetWidth = (contentWidth - sheetMargin) / 2
-    let sheetHeight = (contentHeight - sheetMargin) / 2
+    const contentWidth = width - leftMargin - rightMargin;
+    const contentHeight = height - topMargin - bottomMargin;
+    const sheetWidth = (contentWidth - sheetMargin) / 2
+    const sheetHeight = (contentHeight - sheetMargin) / 2
 
     return new Promise((resolve, reject) => {
-        let doc = new PDFDocument({
+        const doc = new PDFDocument({
             // size: [width, height],
             size: 'a4',
             margins: {
@@ -156,10 +156,10 @@ async function generatePDF(count) {
         });
 
         // Collect data and resolve promise on success.
-        let buffers = [];
+        const buffers = [];
         doc.on('data', (buffer) => buffers.push(buffer))
         doc.on('end', () => {
-            let buffer = Buffer.concat(buffers);
+            const buffer = Buffer.concat(buffers);
             resolve(buffer)
         })
 
