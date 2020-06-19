@@ -192,7 +192,8 @@ exports.handler = async (event, context) => {
         await fetch(url.toString(), {
             method: method,
             headers: {
-                'User-Agent': 'NetlifyFunctions/1.0 suppkultur-bingo.js',
+                'user-agent': event.headers['user-agent'],
+                'x-forwarded-for': event.headers['x-forwarded-for'],
             },
         })
     }
