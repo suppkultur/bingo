@@ -13,7 +13,7 @@
   "homepage": "https://github.com/suppkultur/bingo#readme",
   "devDependencies": {
     "image-size": "^0.8.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "pdfkit": "^0.11.0"
   }
 }
