@@ -121,7 +121,7 @@ function drawCard(doc, x, y, width, height, horizontalMargin) {
 }
 
 // generatePDF generates the PDF and returns its buffer.
-async function generatePDF(count) {
+exports.generatePDF = async (count) => {
     // All units in mm.
     const width = mmToPdfPoints(210);
     const height = mmToPdfPoints(297);
@@ -178,33 +178,3 @@ async function generatePDF(count) {
     })
 }
 
-exports.handler = async (event, context) => {
-    const count = event.queryStringParameters.count || 1;
-
-    if (process.env.ANALYTICS_URL) {
-        const method = process.env.ANALYTICS_METHOD || 'POST';
-        const url = new URL(process.env.ANALYTICS_URL);
-        // These parameters are specifically for goatcounter.com.
-        url.searchParams.append('p', `/.netlify/functions/suppkultur-bingo?count=${count}`)
-        url.searchParams.append('t', 'suppkultur-bingo.pdf');
-        // We need to await bc Netlify may kill our function before we can
-        // send the request.
-        await fetch(url.toString(), {
-            method: method,
-            headers: {
-                'user-agent': event.headers['user-agent'],
-                'x-forwarded-for': event.headers['x-forwarded-for'],
-            },
-        })
-    }
-
-    const buffer = await generatePDF(count)
-    return {
-        isBase64Encoded: true,
-        statusCode: 200,
-        headers: {
-            'Content-Type': 'application/pdf',
-        },
-        body: buffer.toString('base64'),
-    };
-};
